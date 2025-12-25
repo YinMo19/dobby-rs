@@ -12,4 +12,4 @@ keywords = ["hook","android","dobby","pwn"]
 thiserror = "1.0"
 # dobby-sys = { version = "0.1" }
 
-dobby-sys = { git = "https://github.com/YinMo19/dobby-sys.git" }
+dobby-sys = { git = "https://github.com/YinMo19/dobby-sys.git", rev = "9fcf6a353655f37382e773f67289bdf4dd471589" }
