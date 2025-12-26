@@ -112,15 +112,22 @@ pub enum DobbyMemoryOperationError {
 pub unsafe fn patch_code(addr: Address, code: &[u8]) -> Result<(), DobbyMemoryOperationError> {
     let ret = ffi::DobbyCodePatch(addr, code.as_ptr() as *mut _, code.len() as u32);
     match ret {
-        ffi::MemoryOperationError_kMemoryOperationSuccess => Ok(()),
-        ffi::MemoryOperationError_kMemoryOperationError => {
-            Err(DobbyMemoryOperationError::MemoryOperationError)
-        }
-        ffi::MemoryOperationError_kNotEnough => Err(DobbyMemoryOperationError::NotEnough),
-        ffi::MemoryOperationError_kNotSupportAllocateExecutableMemory => {
-            Err(DobbyMemoryOperationError::NotSupportAllocateExecutableMemory)
-        }
-        ffi::MemoryOperationError_kNone => Err(DobbyMemoryOperationError::None),
+        0 => Ok(()),
+        -1 => Err(DobbyMemoryOperationError::MemoryOperationError),
+        _ => unreachable!(),
+    }
+}
+
+pub type DobbyRegisterContext = ffi::DobbyRegisterContext;
+
+pub unsafe fn instrument(
+    addr: Address,
+    callback: Option<unsafe extern "C" fn(*mut c_void, *mut ffi::DobbyRegisterContext)>,
+) -> Result<(), DobbyMemoryOperationError> {
+    let ret = ffi::DobbyInstrument(addr, callback);
+    match ret {
+        0 => Ok(()),
+        -1 => Err(DobbyMemoryOperationError::MemoryOperationError),
         _ => unreachable!(),
     }
 }
