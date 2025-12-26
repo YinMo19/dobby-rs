@@ -110,7 +110,7 @@ pub enum DobbyMemoryOperationError {
 /// # Safety
 /// THIS FUNCTION IS NOT SAFE.
 pub unsafe fn patch_code(addr: Address, code: &[u8]) -> Result<(), DobbyMemoryOperationError> {
-    let ret = ffi::CodePatch(addr, code.as_ptr() as *mut _, code.len() as u32);
+    let ret = ffi::DobbyCodePatch(addr, code.as_ptr() as *mut _, code.len() as u32);
     match ret {
         ffi::MemoryOperationError_kMemoryOperationSuccess => Ok(()),
         ffi::MemoryOperationError_kMemoryOperationError => {
