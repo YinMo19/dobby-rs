@@ -122,9 +122,9 @@ pub type DobbyRegisterContext = ffi::DobbyRegisterContext;
 
 pub unsafe fn instrument(
     addr: Address,
-    callback: Option<unsafe extern "C" fn(*mut c_void, *mut ffi::DobbyRegisterContext)>,
+    callback: unsafe extern "C" fn(*mut c_void, *mut ffi::DobbyRegisterContext),
 ) -> Result<(), DobbyMemoryOperationError> {
-    let ret = ffi::DobbyInstrument(addr, callback);
+    let ret = ffi::DobbyInstrument(addr, Some(callback));
     match ret {
         0 => Ok(()),
         -1 => Err(DobbyMemoryOperationError::MemoryOperationError),
